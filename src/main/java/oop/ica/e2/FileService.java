@@ -28,12 +28,12 @@ public class FileService {
     /**
      * @constant String: project relative file patch
      */
-    private static final String RELATIVE_FILE_PATH = "src/main/java/oop/ica/e1/";
+    private static final String RELATIVE_FILE_PATH = "src/main/java/oop/ica/e2/";
 
     /**
      * @constant String: Input data file name
      */
-    private static final String INPUT_FILE_PATH = "AsherSportsConsortium.csv";
+    private static final String INPUT_FILE_PATH = "AsherSportsConsortium3.csv";
 
     /**
      * @constant String: Output data file name
