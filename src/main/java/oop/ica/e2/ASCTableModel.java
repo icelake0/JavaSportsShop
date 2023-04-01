@@ -34,31 +34,32 @@ public class ASCTableModel extends AbstractTableModel {
 
     /**
      * Populate the model data with stock items
-     * 
-     * @param ArrayList<StockItem> dataList 
+     *
+     * @param ArrayList<StockItem> dataList
      */
     private void populateDataWithStockItems(final ArrayList<StockItem> dataList) {
-        for (int index = 0; index < dataList.size(); index++)
+        for (int index = 0; index < dataList.size(); index++) {
             data[index] = this.getStockItemDataObject(dataList.get(index));
+        }
     }
-    
+
     /**
      * Get stock item data object for a stock item
-     * 
+     *
      * @param stockItem
      * @return Object[]
      */
-    private Object[] getStockItemDataObject(StockItem stockItem){
+    private Object[] getStockItemDataObject(StockItem stockItem) {
         return Arrays.copyOf(new Object[]{
-                stockItem.getProductCode(), stockItem.getproductTitle(),
-                stockItem.getProductDescription(), stockItem.getUnitPriceFull(),
-                stockItem.getQuantityOnStock()
-            }, columnNames.length);
+            stockItem.getProductCode(), stockItem.getproductTitle(),
+            stockItem.getProductDescription(), stockItem.getUnitPriceFull(),
+            stockItem.getQuantityOnStock()
+        }, columnNames.length);
     }
 
     /**
      * Get total number of rows in the JTable model
-     * 
+     *
      * @return int
      */
     @Override
@@ -68,7 +69,8 @@ public class ASCTableModel extends AbstractTableModel {
 
     /**
      * Get total number of columns in the JTable model
-     * @return 
+     *
+     * @return
      */
     @Override
     public int getColumnCount() {
@@ -77,7 +79,7 @@ public class ASCTableModel extends AbstractTableModel {
 
     /**
      * Get the value at a row and column index of the JTable model
-     * 
+     *
      * @param rowIndex
      * @param columnIndex
      * @return Object
@@ -89,10 +91,10 @@ public class ASCTableModel extends AbstractTableModel {
 
     /**
      * Set the value at a row and column index of the JTable model
-     * 
+     *
      * @param value
      * @param rowIndex
-     * @param columnIndex 
+     * @param columnIndex
      */
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
