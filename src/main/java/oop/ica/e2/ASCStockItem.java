@@ -1,12 +1,11 @@
 package oop.ica.e2;
 
+import java.util.Formatter;
+
 /**
- *
- * @author Heshani Iddagoda - W9621281
- * @author Akshay Kumar - Q2078619
  * @author Gbemileke Ajiboye - C2479785
  */
-public class StockItem {
+public class ASCStockItem {
 
     /**
      * @var String: The Stock item product code
@@ -50,7 +49,7 @@ public class StockItem {
      * @method StockItem
      *
      */
-    public StockItem(
+    public ASCStockItem(
             String productCode,
             String productTitle,
             String productDescription,
@@ -140,6 +139,18 @@ public class StockItem {
      */
     public int getUnitPricePence() {
         return unitPricePence;
+    }
+    
+    /**
+     * Get the full stock item unit price
+     *
+     * @method getUnitPriceFull
+     * @return String
+     */
+    public String getUnitPriceFull() {
+        return new Formatter().format("£%,.2f",
+         Double.parseDouble(unitPricePounds+"."+unitPricePence)
+        ).toString();
     }
 
     /**

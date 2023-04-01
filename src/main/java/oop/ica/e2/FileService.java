@@ -14,26 +14,24 @@ import java.util.Formatter;
 import java.util.Scanner;
 
 /**
- * @author Heshani Iddagoda - W9621281
- * @author Akshay Kumar - Q2078619
  * @author Gbemileke Ajiboye - C2479785
  */
 public class FileService {
 
     /**
-     * @constant String: The delimiter for stockitem props in string
+     * @constant String: The delimiter for stock item props in string
      */
     private static final String DELIMITER = ",";
 
     /**
      * @constant String: project relative file patch
      */
-    private static final String RELATIVE_FILE_PATH = "src/main/java/oop/ica/e1/";
+    private static final String RELATIVE_FILE_PATH = "src/main/java/oop/ica/e2/";
 
     /**
      * @constant String: Input data file name
      */
-    private static final String INPUT_FILE_PATH = "AsherSportsConsortium.csv";
+    private static final String INPUT_FILE_PATH = "AsherSportsConsortium3.csv";
 
     /**
      * @constant String: Output data file name
@@ -43,7 +41,7 @@ public class FileService {
     /**
      * @var ArrayList<StockItem>: An array list of all stock items
      */
-    private ArrayList<StockItem> stockItems;
+    private ArrayList<ASCStockItem> stockItems;
 
     /**
      * Class constructor
@@ -60,7 +58,7 @@ public class FileService {
      * @param stockItems ArrayList
      * @method FileService
      */
-    private FileService(ArrayList<StockItem> stockItems) {
+    private FileService(ArrayList<ASCStockItem> stockItems) {
         this.stockItems = stockItems;
     }
 
@@ -78,7 +76,7 @@ public class FileService {
      *
      * @return FileService
      */
-    public static FileService make(ArrayList<StockItem> stockItems) {
+    public static FileService make(ArrayList<ASCStockItem> stockItems) {
         return new FileService(stockItems);
     }
 
@@ -89,7 +87,7 @@ public class FileService {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public ArrayList<StockItem> loadData() throws FileNotFoundException, IOException {
+    public ArrayList<ASCStockItem> loadData() throws FileNotFoundException, IOException {
         String pathname = FileService.RELATIVE_FILE_PATH + FileService.INPUT_FILE_PATH;
         File inputFile = new File(pathname);
 
@@ -123,12 +121,12 @@ public class FileService {
     }
 
     /**
-     * Create a single StockItem instance from one line of of file string
+     * Create a single ASCStockItem instance from one line of of file string
      *
      * @param line: String
      * @return
      */
-    private StockItem createStockItemFromLine(String line) {
+    private ASCStockItem createStockItemFromLine(String line) {
         String[] lineArray = line.split(FileService.DELIMITER);
         String productCode = lineArray[0];
         String title = lineArray[1];
@@ -136,7 +134,7 @@ public class FileService {
         int unitPricePounds = Integer.parseInt(lineArray[3]);
         int unitPricePence = Integer.parseInt(lineArray[4]);
         int quantityOnStock = Integer.parseInt(lineArray[5]);
-        return new StockItem(
+        return new ASCStockItem(
                 productCode, title,
                 description, unitPricePounds,
                 unitPricePence, quantityOnStock
@@ -178,10 +176,10 @@ public class FileService {
      * Create a single line string representation of a stockitem from an
      * instance
      *
-     * @param stockItem: StockItem
+     * @param stockItem: ASCStockItem
      * @return String
      */
-    private String formatStockItemString(StockItem stockItem) {
+    private String formatStockItemString(ASCStockItem stockItem) {
         return new Formatter().format("%s,%s,%s,%s,%s,%s\r%n",
                 stockItem.getProductCode(), stockItem.getproductTitle(),
                 stockItem.getProductDescription(), stockItem.getUnitPricePounds(),
