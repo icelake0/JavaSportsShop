@@ -5,7 +5,6 @@ import java.util.Arrays;
 import javax.swing.table.AbstractTableModel;
 
 /**
- *
  * @author Gbemileke Ajiboye - C2479785
  */
 public class ASCTableModel extends AbstractTableModel {

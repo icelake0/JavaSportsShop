@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 /**
  * @author Gbemileke Ajiboye - C2479785
  */
-public class ASCStockItem {
+public class ASCStockItem implements ASCStockItemInterface {
 
     /**
      * @var String: The Stock item product code
@@ -77,6 +77,7 @@ public class ASCStockItem {
      * @method getProductCode
      * @return String
      */
+    @Override
     public String getProductCode() {
         return productCode;
     }
@@ -87,20 +88,8 @@ public class ASCStockItem {
      * @method getproductTitle
      * @return String
      */
+    @Override
     public String getproductTitle() {
-        return productTitle;
-    }
-
-    /**
-     * Get the stock item short product title
-     *
-     * @method getShortProductTitle
-     * @return String
-     */
-    public String getShortProductTitle() {
-        if (productTitle.length() > 30) {
-            return productTitle.substring(27) + "...";
-        }
         return productTitle;
     }
 
@@ -110,20 +99,8 @@ public class ASCStockItem {
      * @method getProductDescription
      * @return String
      */
+    @Override
     public String getProductDescription() {
-        return productDescription;
-    }
-
-    /**
-     * Get the stock item short product description
-     *
-     * @method getShortProductDescription
-     * @return String
-     */
-    public String getShortProductDescription() {
-        if (productDescription.length() > 50) {
-            return productDescription.substring(47) + "...";
-        }
         return productDescription;
     }
 
@@ -133,6 +110,7 @@ public class ASCStockItem {
      * @method getUnitPricePounds
      * @return Integer
      */
+    @Override
     public int getUnitPricePounds() {
         return unitPricePounds;
     }
@@ -143,6 +121,7 @@ public class ASCStockItem {
      * @method getUnitPricePence
      * @return Integer
      */
+    @Override
     public int getUnitPricePence() {
         return unitPricePence;
     }
@@ -153,6 +132,7 @@ public class ASCStockItem {
      * @method getUnitPriceFull
      * @return String
      */
+    @Override
     public String getUnitPriceFull() {
         return new Formatter().format("£%,.2f",
                 Double.parseDouble(unitPricePounds + "." + unitPricePence)
@@ -165,6 +145,7 @@ public class ASCStockItem {
      * @method getQuantityOnStock
      * @return Integer
      */
+    @Override
     public int getQuantityOnStock() {
         return quantityOnStock;
     }
@@ -175,6 +156,7 @@ public class ASCStockItem {
      * @method getImageIcon
      * @return ImageIcon
      */
+    @Override
     public ImageIcon getImageIcon() {
         return imageIcon;
     }
@@ -184,6 +166,7 @@ public class ASCStockItem {
      *
      * @method reduceQuantityOnStockByOne
      */
+    @Override
     public void reduceQuantityOnStockByOne() {
         this.reduceQuantityOnStockByX(1);
     }
@@ -193,6 +176,7 @@ public class ASCStockItem {
      *
      * @method reduceQuantityOnStockByX
      */
+    @Override
     public void reduceQuantityOnStockByX(int X) {
         this.quantityOnStock -= X;
     }
@@ -202,6 +186,7 @@ public class ASCStockItem {
      *
      * @method increaseQuantityOnStockByOne
      */
+    @Override
     public void increaseQuantityOnStockByOne() {
         this.increaseQuantityOnStockByY(1);
     }
@@ -211,6 +196,7 @@ public class ASCStockItem {
      *
      * @method increaseQuantityOnStockByY
      */
+    @Override
     public void increaseQuantityOnStockByY(int Y) {
         this.quantityOnStock += Y;
     }
@@ -221,6 +207,7 @@ public class ASCStockItem {
      * @method isOnStock
      * @return Boolean
      */
+    @Override
     public boolean isOnStock() {
         return this.quantityOnStock > 0;
     }
@@ -231,6 +218,7 @@ public class ASCStockItem {
      * @method isOutOfStock
      * @return Boolean
      */
+    @Override
     public boolean isOutOfStock() {
         return !this.isOnStock();
     }
@@ -241,6 +229,7 @@ public class ASCStockItem {
      * @method isLowOnStock
      * @return Boolean
      */
+    @Override
     public boolean isLowOnStock() {
         return this.quantityOnStock < 5;
     }
