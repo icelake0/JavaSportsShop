@@ -185,7 +185,16 @@ public class ASCStockItem {
      * @method reduceQuantityOnStockByOne
      */
     public void reduceQuantityOnStockByOne() {
-        this.quantityOnStock--;
+        this.reduceQuantityOnStockByX(1);
+    }
+
+    /**
+     * Decrease the quantity on stock of stock item by a value X passed
+     *
+     * @method reduceQuantityOnStockByX
+     */
+    public void reduceQuantityOnStockByX(int X) {
+        this.quantityOnStock -= X;
     }
 
     /**
@@ -194,6 +203,15 @@ public class ASCStockItem {
      * @method increaseQuantityOnStockByOne
      */
     public void increaseQuantityOnStockByOne() {
+        this.increaseQuantityOnStockByY(1);
+    }
+
+    /**
+     * Increase the quantity on stock of stock item by a value Y passed
+     *
+     * @method increaseQuantityOnStockByY
+     */
+    public void increaseQuantityOnStockByY(int Y) {
         this.quantityOnStock++;
     }
 

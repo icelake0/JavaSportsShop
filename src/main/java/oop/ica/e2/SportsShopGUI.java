@@ -1,9 +1,14 @@
 package oop.ica.e2;
 
+import java.awt.Image;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.JOptionPane;
@@ -115,6 +120,11 @@ public class SportsShopGUI extends javax.swing.JFrame {
         });
 
         buyXButton.setText("Buy X");
+        buyXButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buyXButtonActionPerformed(evt);
+            }
+        });
 
         addYButton.setText("Add Y");
 
@@ -292,8 +302,8 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Handle stock item table mouse pressed event
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void ascStockItemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ascStockItemMousePressed
         int selectedRow = ascStockItem.getSelectedRow();
@@ -306,9 +316,89 @@ public class SportsShopGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_ascStockItemMousePressed
 
     /**
+     * Handle click event for buyX button
+     *
+     * @param evt
+     */
+    private void buyXButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyXButtonActionPerformed
+        int selectedRow = ascStockItem.getSelectedRow();
+
+        if (!this.validateSelectedItem(selectedRow)) {
+            this.showNoItemSelectedError();
+            return;
+        }
+
+        ASCStockItem selectedStockItem = stockItems.get(selectedRow);
+
+        if (selectedStockItem.isOutOfStock()) {
+            this.showOutOfStockError();
+            return;
+        }
+
+        int selectedValue = this.getInputFromUser(selectedStockItem, "buy");
+
+        if (selectedValue > 0) {
+            selectedStockItem.reduceQuantityOnStockByX(selectedValue);
+            this.updateStockItemTable(selectedStockItem, selectedRow);
+            this.showBuyConfirmationMessage(selectedStockItem, selectedValue);
+        }
+    }//GEN-LAST:event_buyXButtonActionPerformed
+
+    /**
+     * Get input from user using a selection input dialog
+     *
+     * @param selectedStockItem
+     * @param action
+     * @return int
+     */
+    private int getInputFromUser(ASCStockItem selectedStockItem, String action) {
+        int selectedValue = -1;
+        String dialogTitle = action == "buy" ? "Quantity to purchase" : "Quantity to add";
+        try {
+            selectedValue = (int) JOptionPane.showInputDialog(this,
+                    "Please select the quantity you wish to " + action + " of: \n'" + selectedStockItem.getproductTitle() + "'",
+                    dialogTitle,
+                    JOptionPane.QUESTION_MESSAGE,
+                    this.getInputDialogImageIcon(selectedStockItem),
+                    this.getSelectionOptionsInputDialog(selectedStockItem),
+                    1
+            );
+        } catch (NullPointerException e) {
+        }
+
+        return selectedValue;
+    }
+
+    /**
+     * Get the selection options for input dialog
+     *
+     * @param stockItem
+     * @return Object[]
+     */
+    private Object[] getSelectionOptionsInputDialog(ASCStockItem stockItem) {
+        return IntStream.rangeClosed(
+                1, stockItem.getQuantityOnStock()
+        ).boxed().collect(Collectors.toList()).toArray();
+    }
+
+    /**
+     * Get an 100 X 100 size of the stock item image to be used for dialog
+     *
+     * @param stockItem
+     * @return ImageIcon
+     */
+    private ImageIcon getInputDialogImageIcon(ASCStockItem stockItem) {
+        return new ImageIcon(
+                stockItem.getImageIcon()
+                        .getImage()
+                        .getScaledInstance(100, 100, Image.SCALE_SMOOTH)
+        );
+    }
+
+    /**
      * Show low stock warning message
-     * 
-     * @param stockItem 
+     *
+     * @param stockItem
      */
     private void showLowStockWarningMessage(ASCStockItem stockItem) {
         String lowStockMessage = stockItem.isOutOfStock()
@@ -324,9 +414,9 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Show warning message passed
-     * 
+     *
      * @param message
-     * @param title 
+     * @param title
      */
     private void showWarningMessgae(String message, String title) {
         JOptionPane.showMessageDialog(this, message, title, JOptionPane.WARNING_MESSAGE);
