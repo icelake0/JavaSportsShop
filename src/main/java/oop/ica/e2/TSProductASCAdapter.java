@@ -23,7 +23,7 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * 
      * @param tsProduct 
      */
-    public void TSProductASCAdapter (TSProduct tsProduct)
+    public TSProductASCAdapter (TSProduct tsProduct)
     {
         this.tsProduct = tsProduct;
         this.imageIcon = new ImageIcon("./images/ts_pics/" + this.getProductCode() + ".jpg");
