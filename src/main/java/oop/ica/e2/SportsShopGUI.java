@@ -5,8 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Formatter;
-import java.util.IllegalFormatConversionException;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.swing.ImageIcon;
@@ -20,9 +18,9 @@ import javax.swing.JOptionPane;
 public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
-     * @var ArrayList<StockItem>: An array list of all stock items
+     * @var ArrayList<ASCStockItemInterface>: An array list of all stock items
      */
-    private ArrayList<ASCStockItem> stockItems = new ArrayList();
+    private ArrayList<ASCStockItemInterface> stockItems = new ArrayList();
 
     /**
      * @const string array of JTable column names
@@ -70,6 +68,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
         ascStockItem = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Ashers Sports Consortium");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -245,7 +244,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
             return;
         }
 
-        ASCStockItem selectedStockItem = stockItems.get(selectedRow);
+        ASCStockItemInterface selectedStockItem = stockItems.get(selectedRow);
 
         if (selectedStockItem.isOutOfStock()) {
             this.showOutOfStockError();
@@ -272,7 +271,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
             return;
         }
 
-        ASCStockItem selectedStockItem = stockItems.get(selectedRow);
+        ASCStockItemInterface selectedStockItem = stockItems.get(selectedRow);
 
         selectedStockItem.increaseQuantityOnStockByOne();
 
@@ -319,7 +318,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
     private void ascStockItemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ascStockItemMousePressed
         int selectedRow = ascStockItem.getSelectedRow();
         if (this.validateSelectedItem(selectedRow)) {
-            ASCStockItem selectedStockItem = stockItems.get(selectedRow);
+            ASCStockItemInterface selectedStockItem = stockItems.get(selectedRow);
             this.photoLabel.setIcon(selectedStockItem.getImageIcon());
             this.itemLabel.setText(selectedStockItem.getproductTitle());
             this.showLowStockWarningMessage(selectedStockItem);
@@ -339,7 +338,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
             return;
         }
 
-        ASCStockItem selectedStockItem = stockItems.get(selectedRow);
+        ASCStockItemInterface selectedStockItem = stockItems.get(selectedRow);
 
         if (selectedStockItem.isOutOfStock()) {
             this.showOutOfStockError();
@@ -368,7 +367,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
             return;
         }
 
-        ASCStockItem selectedStockItem = stockItems.get(selectedRow);
+        ASCStockItemInterface selectedStockItem = stockItems.get(selectedRow);
 
         int inputValue = this.getAddQuantityFromUser(selectedStockItem);
 
@@ -386,7 +385,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param action
      * @return int
      */
-    private int getAddQuantityFromUser(ASCStockItem selectedStockItem) {
+    private int getAddQuantityFromUser(ASCStockItemInterface selectedStockItem) {
         int inputValue = -1;
 
         try {
@@ -414,7 +413,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param action
      * @return int
      */
-    private int getBuyQuantityFromUser(ASCStockItem selectedStockItem) {
+    private int getBuyQuantityFromUser(ASCStockItemInterface selectedStockItem) {
         int selectedValue = -1;
 
         try {
@@ -438,7 +437,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param stockItem
      * @return Object[]
      */
-    private Object[] getSelectionOptionsInputDialog(ASCStockItem stockItem) {
+    private Object[] getSelectionOptionsInputDialog(ASCStockItemInterface stockItem) {
         return IntStream.rangeClosed(
                 1, stockItem.getQuantityOnStock()
         ).boxed().collect(Collectors.toList()).toArray();
@@ -450,7 +449,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param stockItem
      * @return ImageIcon
      */
-    private ImageIcon getInputDialogImageIcon(ASCStockItem stockItem) {
+    private ImageIcon getInputDialogImageIcon(ASCStockItemInterface stockItem) {
         return new ImageIcon(
                 stockItem.getImageIcon()
                         .getImage()
@@ -463,7 +462,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
      *
      * @param stockItem
      */
-    private void showLowStockWarningMessage(ASCStockItem stockItem) {
+    private void showLowStockWarningMessage(ASCStockItemInterface stockItem) {
         String lowStockMessage = stockItem.isOutOfStock()
                 ? "'%s' is out of stock" : "'%s' has only %d unit(s) of stock";
         if (stockItem.isLowOnStock()) {
@@ -527,7 +526,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param selectedStockItem
      * @param selectedRow
      */
-    private void updateStockItemTable(ASCStockItem selectedStockItem, int selectedRow) {
+    private void updateStockItemTable(ASCStockItemInterface selectedStockItem, int selectedRow) {
         ascStockItemModel.setValueAt(
                 selectedStockItem.getQuantityOnStock(),
                 selectedRow,
@@ -541,7 +540,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param stockItem
      * @param unitBought
      */
-    private void showBuyConfirmationMessage(ASCStockItem stockItem, int unitBought) {
+    private void showBuyConfirmationMessage(ASCStockItemInterface stockItem, int unitBought) {
         JOptionPane.showMessageDialog(this,
                 new Formatter().format("Item: %s%nPrice: %s%nUnit(s) bought: %d%nStock Remaining: %d",
                         stockItem.getproductTitle(), stockItem.getUnitPriceFull(),
@@ -556,7 +555,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param stockItem
      * @param unitAdded
      */
-    private void showAddConfirmationMessage(ASCStockItem stockItem, int unitAdded) {
+    private void showAddConfirmationMessage(ASCStockItemInterface stockItem, int unitAdded) {
         JOptionPane.showMessageDialog(this,
                 new Formatter().format("Item: %s%nUnit(s) added: %d%nNew stock quantity: %d",
                         stockItem.getproductTitle(), unitAdded, stockItem.getQuantityOnStock()

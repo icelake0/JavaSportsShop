@@ -12,6 +12,7 @@ import static java.nio.file.StandardOpenOption.WRITE;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Scanner;
+import oop.ica.ts.TSProduct;
 
 /**
  * @author Gbemileke Ajiboye - C2479785
@@ -29,9 +30,19 @@ public class FileService {
     private static final String RELATIVE_FILE_PATH = "src/main/java/oop/ica/e2/";
 
     /**
+     * @constant String: project relative file patch for TS data
+     */
+    private static final String RELATIVE_TS_FILE_PATH = "src/main/java/oop/ica/ts/";
+
+    /**
      * @constant String: Input data file name
      */
     private static final String INPUT_FILE_PATH = "AsherSportsConsortium3.csv";
+
+    /**
+     * @constant String: Input data file name
+     */
+    private static final String TS_INPUT_FILE_PATH = "ts_products.txt";
 
     /**
      * @constant String: Output data file name
@@ -39,9 +50,9 @@ public class FileService {
     private static final String OUTPUT_FILE_PATH = "asc_output.txt";
 
     /**
-     * @var ArrayList<StockItem>: An array list of all stock items
+     * @var ArrayList<ASCStockItemInterface>: An array list of all stock items
      */
-    private ArrayList<ASCStockItem> stockItems;
+    private ArrayList<ASCStockItemInterface> stockItems;
 
     /**
      * Class constructor
@@ -58,7 +69,7 @@ public class FileService {
      * @param stockItems ArrayList
      * @method FileService
      */
-    private FileService(ArrayList<ASCStockItem> stockItems) {
+    private FileService(ArrayList<ASCStockItemInterface> stockItems) {
         this.stockItems = stockItems;
     }
 
@@ -67,27 +78,45 @@ public class FileService {
      *
      * @return FileService
      */
-    public static FileService make() { 
+    public static FileService make() {
         return new FileService();
     }
 
     /**
-     * Make an instance of FileService with ArrayList<StockItem> passed
+     * Make an instance of FileService with ArrayList<ASCStockItemInterface>
+     * passed
      *
+     * @param stockItems
      * @return FileService
      */
-    public static FileService make(ArrayList<ASCStockItem> stockItems) {
+    public static FileService make(ArrayList<ASCStockItemInterface> stockItems) {
         return new FileService(stockItems);
     }
 
     /**
      * Load data from file
      *
-     * @return ArrayList<StockItem> 
+     * @return ArrayList<StockItem>
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public ArrayList<ASCStockItem> loadData() throws FileNotFoundException, IOException {
+    public ArrayList<ASCStockItemInterface> loadData() throws FileNotFoundException, IOException {
+        this.loadASCData();
+        this.loadTSData();
+        if (this.stockItems.size() == 0) {
+            throw new FileNotFoundException("Stock Items data file (" + FileService.INPUT_FILE_PATH + ") is empty.");
+        }
+        return this.stockItems;
+    }
+
+    /**
+     * Load ASC stock items data from file 
+     * 
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
+    private void loadASCData() throws FileNotFoundException, IOException {
+
         String pathname = FileService.RELATIVE_FILE_PATH + FileService.INPUT_FILE_PATH;
         File inputFile = new File(pathname);
 
@@ -98,12 +127,6 @@ public class FileService {
         Scanner fileScanner = new Scanner(inputFile);
         this.buildStockItemArrayList(fileScanner);
         fileScanner.close();
-
-        if (this.stockItems.size() == 0) {
-            throw new FileNotFoundException("Stock Items data file (" + FileService.INPUT_FILE_PATH + ") is empty.");
-        }
-
-        return this.stockItems;
     }
 
     /**
@@ -121,12 +144,13 @@ public class FileService {
     }
 
     /**
-     * Create a single ASCStockItem instance from one line of of file string
+     * Create a single ASCStockItemInterface instance from one line of of file
+     * string
      *
      * @param line: String
      * @return
      */
-    private ASCStockItem createStockItemFromLine(String line) {
+    private ASCStockItemInterface createStockItemFromLine(String line) {
         String[] lineArray = line.split(FileService.DELIMITER);
         String productCode = lineArray[0];
         String title = lineArray[1];
@@ -142,7 +166,61 @@ public class FileService {
     }
 
     /**
-     * Save An Array of stockitems to output file
+     * Load TS stock items from data file 
+     * 
+     * @throws FileNotFoundException, IOException
+     */
+    private void loadTSData() throws FileNotFoundException, IOException {
+        String pathname = FileService.RELATIVE_TS_FILE_PATH + FileService.TS_INPUT_FILE_PATH;
+        File inputFile = new File(pathname);
+        //simply returning because TS data is not required for application to run
+        if (!inputFile.exists() || !inputFile.isFile()) {
+            return;
+        }
+        Scanner fileScanner = new Scanner(inputFile);
+        this.addTSStockItemToArrayList(fileScanner);
+        fileScanner.close();
+    }
+
+    /**
+     * Add TS Stock items to stock item array list
+     *
+     * @param fileScanner : Scanner
+     */
+    private void addTSStockItemToArrayList(Scanner fileScanner) {
+        while (fileScanner.hasNextLine()) {
+            String line = fileScanner.nextLine().trim();
+            if (!line.isEmpty()) {
+                stockItems.add(this.createStockItemFromTSLine(line));
+            }
+        }
+    }
+
+    /**
+     * Create a single TSProductASCAdapter instance from one line of of file string
+     *
+     * @param line: String
+     * @return
+     */
+    private ASCStockItemInterface createStockItemFromTSLine(String line) {
+        String[] lineArray = line.split(FileService.DELIMITER);
+        
+        String num = lineArray[0];
+        String make = lineArray[1];
+        String mdl = lineArray[2];
+        String clr = lineArray[3];
+        String notes = lineArray[4];
+        double price = Double.parseDouble(lineArray[5]);
+        int stk = Integer.parseInt(lineArray[6]);
+
+        TSProduct tsProduct = new TSProduct(
+                num, make, mdl, clr, notes, price, stk
+        );
+        return new TSProductASCAdapter ( tsProduct);
+    }
+
+    /**
+     * Save An Array of stock items to output file
      *
      * @throws IOException
      */
@@ -158,7 +236,7 @@ public class FileService {
     }
 
     /**
-     * Build a string of stockitems from the instance array of stockitems
+     * Build a string of stock items from the instance array of stock items
      *
      * @return outputString: String
      */
@@ -173,13 +251,13 @@ public class FileService {
     }
 
     /**
-     * Create a single line string representation of a stockitem from an
+     * Create a single line string representation of a stock item from an
      * instance
      *
      * @param stockItem: ASCStockItem
      * @return String
      */
-    private String formatStockItemString(ASCStockItem stockItem) {
+    private String formatStockItemString(ASCStockItemInterface stockItem) {
         return new Formatter().format("%s,%s,%s,%s,%s,%s\r%n",
                 stockItem.getProductCode(), stockItem.getproductTitle(),
                 stockItem.getProductDescription(), stockItem.getUnitPricePounds(),
