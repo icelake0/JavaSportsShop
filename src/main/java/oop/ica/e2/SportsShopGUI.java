@@ -1,9 +1,15 @@
 package oop.ica.e2;
 
+import java.awt.Image;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.IllegalFormatConversionException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.JOptionPane;
@@ -53,12 +59,13 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
         photoPanel = new javax.swing.JPanel();
         photoLabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        itemLabel = new javax.swing.JLabel();
         buyButton = new javax.swing.JButton();
         addButton = new javax.swing.JButton();
         buyXButton = new javax.swing.JButton();
         addYButton = new javax.swing.JButton();
         quitButton = new javax.swing.JButton();
-        itemLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         ascStockItem = new javax.swing.JTable();
 
@@ -72,23 +79,36 @@ public class SportsShopGUI extends javax.swing.JFrame {
             }
         });
 
-        photoLabel.setText("photoLabel");
+        photoLabel.setBackground(new java.awt.Color(255, 255, 255));
+        photoLabel.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+
+        jLabel1.setText("Item Photo");
+
+        itemLabel.setText("Item Title");
 
         javax.swing.GroupLayout photoPanelLayout = new javax.swing.GroupLayout(photoPanel);
         photoPanel.setLayout(photoPanelLayout);
         photoPanelLayout.setHorizontalGroup(
             photoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(photoPanelLayout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addComponent(photoLabel)
-                .addContainerGap(124, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(photoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(photoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(photoPanelLayout.createSequentialGroup()
+                        .addGroup(photoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(itemLabel))
+                        .addGap(0, 266, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         photoPanelLayout.setVerticalGroup(
             photoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(photoPanelLayout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(photoLabel)
-                .addContainerGap(218, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, photoPanelLayout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(photoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(itemLabel))
         );
 
         buyButton.setText("Buy");
@@ -106,8 +126,18 @@ public class SportsShopGUI extends javax.swing.JFrame {
         });
 
         buyXButton.setText("Buy X");
+        buyXButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buyXButtonActionPerformed(evt);
+            }
+        });
 
         addYButton.setText("Add Y");
+        addYButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addYButtonActionPerformed(evt);
+            }
+        });
 
         quitButton.setBackground(new java.awt.Color(255, 51, 0));
         quitButton.setText("Quit");
@@ -117,8 +147,6 @@ public class SportsShopGUI extends javax.swing.JFrame {
             }
         });
 
-        itemLabel.setText("Item Photo");
-
         ascStockItem.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -127,6 +155,11 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
             }
         ));
+        ascStockItem.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                ascStockItemMousePressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(ascStockItem);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -134,7 +167,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(buyButton)
@@ -145,29 +178,22 @@ public class SportsShopGUI extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(addYButton)
                         .addGap(18, 18, 18)
-                        .addComponent(quitButton)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(quitButton))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 517, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 498, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(photoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(itemLabel)
-                                .addGap(0, 0, Short.MAX_VALUE))))))
+                        .addComponent(photoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(itemLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(photoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(photoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buyButton)
                     .addComponent(addButton)
@@ -208,7 +234,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Handle click event for buy button
-     * 
+     *
      * @param evt
      */
     private void buyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyButtonActionPerformed
@@ -235,7 +261,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Handle click event for add button
-     * 
+     *
      * @param evt
      */
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
@@ -257,7 +283,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Handle window open event
-     * 
+     *
      * @param evt
      */
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -267,7 +293,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Handle window closing event
-     * 
+     *
      * @param evt
      */
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -277,13 +303,187 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Handle exit button click event
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
         this.saveData();
         System.exit(0);
     }//GEN-LAST:event_quitButtonActionPerformed
+
+    /**
+     * Handle stock item table mouse pressed event
+     *
+     * @param evt
+     */
+    private void ascStockItemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ascStockItemMousePressed
+        int selectedRow = ascStockItem.getSelectedRow();
+        if (this.validateSelectedItem(selectedRow)) {
+            ASCStockItem selectedStockItem = stockItems.get(selectedRow);
+            this.photoLabel.setIcon(selectedStockItem.getImageIcon());
+            this.itemLabel.setText(selectedStockItem.getproductTitle());
+            this.showLowStockWarningMessage(selectedStockItem);
+        }
+    }//GEN-LAST:event_ascStockItemMousePressed
+
+    /**
+     * Handle click event for buyX button
+     *
+     * @param evt
+     */
+    private void buyXButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyXButtonActionPerformed
+        int selectedRow = ascStockItem.getSelectedRow();
+
+        if (!this.validateSelectedItem(selectedRow)) {
+            this.showNoItemSelectedError();
+            return;
+        }
+
+        ASCStockItem selectedStockItem = stockItems.get(selectedRow);
+
+        if (selectedStockItem.isOutOfStock()) {
+            this.showOutOfStockError();
+            return;
+        }
+
+        int selectedValue = this.getBuyQuantityFromUser(selectedStockItem);
+
+        if (selectedValue > 0) {
+            selectedStockItem.reduceQuantityOnStockByX(selectedValue);
+            this.updateStockItemTable(selectedStockItem, selectedRow);
+            this.showBuyConfirmationMessage(selectedStockItem, selectedValue);
+        }
+    }//GEN-LAST:event_buyXButtonActionPerformed
+
+    /**
+     * Handle click event for addY button
+     *
+     * @param evt
+     */
+    private void addYButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addYButtonActionPerformed
+        int selectedRow = ascStockItem.getSelectedRow();
+
+        if (!this.validateSelectedItem(selectedRow)) {
+            this.showNoItemSelectedError();
+            return;
+        }
+
+        ASCStockItem selectedStockItem = stockItems.get(selectedRow);
+
+        int inputValue = this.getAddQuantityFromUser(selectedStockItem);
+
+        if (inputValue > 0) {
+            selectedStockItem.increaseQuantityOnStockByY(inputValue);
+            this.updateStockItemTable(selectedStockItem, selectedRow);
+            this.showAddConfirmationMessage(selectedStockItem, inputValue);
+        }
+    }//GEN-LAST:event_addYButtonActionPerformed
+
+    /**
+     * Get buy quantity input from user using a selection input dialog
+     *
+     * @param selectedStockItem
+     * @param action
+     * @return int
+     */
+    private int getAddQuantityFromUser(ASCStockItem selectedStockItem) {
+        int inputValue = -1;
+
+        try {
+            String inputString = JOptionPane.showInputDialog(this,
+                    "Please select the quantity you wish to add of: \n'" + selectedStockItem.getproductTitle() + "'",
+                    "Quantity to purchase",
+                    JOptionPane.QUESTION_MESSAGE,
+                    this.getInputDialogImageIcon(selectedStockItem),
+                    null, null
+            ).toString();
+            inputValue = Integer.parseInt(inputString);
+        } catch (NumberFormatException e) {
+            this.showError("Please input a whole number.", "Invalid input");
+            return this.getAddQuantityFromUser(selectedStockItem);
+        } catch (NullPointerException e) {
+        }
+
+        return inputValue;
+    }
+
+    /**
+     * Get buy quantity input from user using a selection input dialog
+     *
+     * @param selectedStockItem
+     * @param action
+     * @return int
+     */
+    private int getBuyQuantityFromUser(ASCStockItem selectedStockItem) {
+        int selectedValue = -1;
+
+        try {
+            selectedValue = (int) JOptionPane.showInputDialog(this,
+                    "Please select the quantity you wish to buy of: \n'" + selectedStockItem.getproductTitle() + "'",
+                    "Quantity to purchase",
+                    JOptionPane.QUESTION_MESSAGE,
+                    this.getInputDialogImageIcon(selectedStockItem),
+                    this.getSelectionOptionsInputDialog(selectedStockItem),
+                    1
+            );
+        } catch (NullPointerException e) {
+        }
+
+        return selectedValue;
+    }
+
+    /**
+     * Get the selection options for input dialog
+     *
+     * @param stockItem
+     * @return Object[]
+     */
+    private Object[] getSelectionOptionsInputDialog(ASCStockItem stockItem) {
+        return IntStream.rangeClosed(
+                1, stockItem.getQuantityOnStock()
+        ).boxed().collect(Collectors.toList()).toArray();
+    }
+
+    /**
+     * Get an 100 X 100 size of the stock item image to be used for dialog
+     *
+     * @param stockItem
+     * @return ImageIcon
+     */
+    private ImageIcon getInputDialogImageIcon(ASCStockItem stockItem) {
+        return new ImageIcon(
+                stockItem.getImageIcon()
+                        .getImage()
+                        .getScaledInstance(100, 100, Image.SCALE_SMOOTH)
+        );
+    }
+
+    /**
+     * Show low stock warning message
+     *
+     * @param stockItem
+     */
+    private void showLowStockWarningMessage(ASCStockItem stockItem) {
+        String lowStockMessage = stockItem.isOutOfStock()
+                ? "'%s' is out of stock" : "'%s' has only %d unit(s) of stock";
+        if (stockItem.isLowOnStock()) {
+            this.showWarningMessgae(
+                    new Formatter().format(lowStockMessage,
+                            stockItem.getproductTitle(), stockItem.getQuantityOnStock()
+                    ).toString(), "Low Stock Warning"
+            );
+        }
+    }
+
+    /**
+     * Show warning message passed
+     *
+     * @param message
+     * @param title
+     */
+    private void showWarningMessgae(String message, String title) {
+        JOptionPane.showMessageDialog(this, message, title, JOptionPane.WARNING_MESSAGE);
+    }
 
     /**
      * Save data stock item to output file
@@ -299,9 +499,9 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Validate that an and item in the table is selected
-     * 
+     *
      * @param selectedRow
-     * @return
+     * @return int
      */
     private boolean validateSelectedItem(int selectedRow) {
         return selectedRow >= 0;
@@ -323,7 +523,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Update the stock item table with quantity changed on stockItem
-     * 
+     *
      * @param selectedStockItem
      * @param selectedRow
      */
@@ -337,38 +537,30 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Show confirmation message for item bought
-     * 
+     *
      * @param stockItem
      * @param unitBought
      */
     private void showBuyConfirmationMessage(ASCStockItem stockItem, int unitBought) {
-        this.showAConfirmationMessageForAction("bought", stockItem, unitBought, "Confirmation of Sale");
+        JOptionPane.showMessageDialog(this,
+                new Formatter().format("Item: %s%nPrice: %s%nUnit(s) bought: %d%nStock Remaining: %d",
+                        stockItem.getproductTitle(), stockItem.getUnitPriceFull(),
+                        unitBought, stockItem.getQuantityOnStock()
+                ).toString(), "Confirmation of Sale", JOptionPane.INFORMATION_MESSAGE
+        );
     }
 
     /**
      * Show confirmation message for item added
-     * 
+     *
      * @param stockItem
      * @param unitAdded
      */
     private void showAddConfirmationMessage(ASCStockItem stockItem, int unitAdded) {
-        this.showAConfirmationMessageForAction("added", stockItem, unitAdded, "Confirmation of Item Added");
-    }
-
-    /**
-     * Show confirmation message for item added or bought
-     * 
-     * @param action
-     * @param stockItem
-     * @param unit
-     * @param title
-     */
-    private void showAConfirmationMessageForAction(String action, ASCStockItem stockItem, int unit, String title) {
         JOptionPane.showMessageDialog(this,
-                new Formatter().format("Item: %s%nPrice: %s%nUnit(s) %s: %d%nStock Remaining: %d",
-                        stockItem.getproductTitle(), stockItem.getUnitPriceFull(),
-                        action, unit, stockItem.getQuantityOnStock()
-                ).toString(), title, JOptionPane.INFORMATION_MESSAGE
+                new Formatter().format("Item: %s%nUnit(s) added: %d%nNew stock quantity: %d",
+                        stockItem.getproductTitle(), unitAdded, stockItem.getQuantityOnStock()
+                ).toString(), "Confirmation of Added Stock", JOptionPane.INFORMATION_MESSAGE
         );
     }
 
@@ -386,7 +578,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Show error message passed
-     * 
+     *
      * @param error
      * @param title
      */
@@ -396,7 +588,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Application entry point
-     * 
+     *
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -438,6 +630,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
     private javax.swing.JButton buyButton;
     private javax.swing.JButton buyXButton;
     private javax.swing.JLabel itemLabel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel photoLabel;
     private javax.swing.JPanel photoPanel;
