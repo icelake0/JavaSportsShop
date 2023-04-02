@@ -83,7 +83,7 @@ public class ASCStockItem {
     public String getproductTitle() {
         return productTitle;
     }
-    
+
     /**
      * Get the stock item short product title
      *
@@ -91,12 +91,11 @@ public class ASCStockItem {
      * @return String
      */
     public String getShortProductTitle() {
-         if(productDescription.length() > 30){
-            return productDescription.substring(27)+"...";
+        if (productTitle.length() > 30) {
+            return productTitle.substring(27) + "...";
         }
         return productTitle;
     }
-
 
     /**
      * Get the stock item product description
@@ -107,7 +106,7 @@ public class ASCStockItem {
     public String getProductDescription() {
         return productDescription;
     }
-    
+
     /**
      * Get the stock item short product description
      *
@@ -115,8 +114,8 @@ public class ASCStockItem {
      * @return String
      */
     public String getShortProductDescription() {
-        if(productDescription.length() > 50){
-            return productDescription.substring(47)+"...";
+        if (productDescription.length() > 50) {
+            return productDescription.substring(47) + "...";
         }
         return productDescription;
     }
@@ -140,7 +139,7 @@ public class ASCStockItem {
     public int getUnitPricePence() {
         return unitPricePence;
     }
-    
+
     /**
      * Get the full stock item unit price
      *
@@ -149,7 +148,7 @@ public class ASCStockItem {
      */
     public String getUnitPriceFull() {
         return new Formatter().format("£%,.2f",
-         Double.parseDouble(unitPricePounds+"."+unitPricePence)
+                Double.parseDouble(unitPricePounds + "." + unitPricePence)
         ).toString();
     }
 
@@ -199,5 +198,15 @@ public class ASCStockItem {
      */
     public boolean isOutOfStock() {
         return !this.isOnStock();
+    }
+
+    /**
+     * Check if stock item is low on stock
+     *
+     * @method isLowOnStock
+     * @return Boolean
+     */
+    public boolean isLowOnStock() {
+        return this.quantityOnStock < 5;
     }
 }

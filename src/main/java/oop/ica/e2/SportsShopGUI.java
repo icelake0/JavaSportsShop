@@ -127,6 +127,11 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
             }
         ));
+        ascStockItem.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                ascStockItemMousePressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(ascStockItem);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -166,8 +171,8 @@ public class SportsShopGUI extends javax.swing.JFrame {
                         .addComponent(itemLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(photoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buyButton)
                     .addComponent(addButton)
@@ -208,7 +213,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Handle click event for buy button
-     * 
+     *
      * @param evt
      */
     private void buyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyButtonActionPerformed
@@ -235,7 +240,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Handle click event for add button
-     * 
+     *
      * @param evt
      */
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
@@ -257,7 +262,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Handle window open event
-     * 
+     *
      * @param evt
      */
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -267,7 +272,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Handle window closing event
-     * 
+     *
      * @param evt
      */
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -277,13 +282,53 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Handle exit button click event
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
         this.saveData();
         System.exit(0);
     }//GEN-LAST:event_quitButtonActionPerformed
+
+    /**
+     * Handle stock item table mouse pressed event
+     * 
+     * @param evt 
+     */
+    private void ascStockItemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ascStockItemMousePressed
+        int selectedRow = ascStockItem.getSelectedRow();
+        if (this.validateSelectedItem(selectedRow)) {
+            ASCStockItem selectedStockItem = stockItems.get(selectedRow);
+            this.showLowStockWarningMessage(selectedStockItem);
+        }
+    }//GEN-LAST:event_ascStockItemMousePressed
+
+    /**
+     * Show low stock warning message
+     * 
+     * @param stockItem 
+     */
+    private void showLowStockWarningMessage(ASCStockItem stockItem) {
+        String lowStockMessage = stockItem.isOutOfStock()
+                ? "'%s' is out of stock" : "'%s' has only %d unit(s) of stock";
+        if (stockItem.isLowOnStock()) {
+            this.showWarningMessgae(
+                    new Formatter().format(lowStockMessage,
+                            stockItem.getproductTitle(), stockItem.getQuantityOnStock()
+                    ).toString(), "Low Stock Warning"
+            );
+        }
+    }
+
+    /**
+     * Show warning message passed
+     * 
+     * @param message
+     * @param title 
+     */
+    private void showWarningMessgae(String message, String title) {
+        JOptionPane.showMessageDialog(this, message, title, JOptionPane.WARNING_MESSAGE);
+    }
 
     /**
      * Save data stock item to output file
@@ -299,9 +344,9 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Validate that an and item in the table is selected
-     * 
+     *
      * @param selectedRow
-     * @return
+     * @return int
      */
     private boolean validateSelectedItem(int selectedRow) {
         return selectedRow >= 0;
@@ -323,7 +368,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Update the stock item table with quantity changed on stockItem
-     * 
+     *
      * @param selectedStockItem
      * @param selectedRow
      */
@@ -337,7 +382,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Show confirmation message for item bought
-     * 
+     *
      * @param stockItem
      * @param unitBought
      */
@@ -347,7 +392,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Show confirmation message for item added
-     * 
+     *
      * @param stockItem
      * @param unitAdded
      */
@@ -357,7 +402,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Show confirmation message for item added or bought
-     * 
+     *
      * @param action
      * @param stockItem
      * @param unit
@@ -386,7 +431,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Show error message passed
-     * 
+     *
      * @param error
      * @param title
      */
@@ -396,7 +441,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
     /**
      * Application entry point
-     * 
+     *
      * @param args the command line arguments
      */
     public static void main(String args[]) {
