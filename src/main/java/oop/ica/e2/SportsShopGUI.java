@@ -1,49 +1,41 @@
 package oop.ica.e2;
 
-import java.awt.Image;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Formatter;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.JOptionPane;
 
 /**
  * @author Gbemileke Ajiboye - C2479785
  */
 public class SportsShopGUI extends javax.swing.JFrame {
-
+    
     /**
-     * @var ArrayList<ASCStockItemInterface>: An array list of all stock items
+     * @var an instance of SportsShopService
      */
-    private ArrayList<ASCStockItemInterface> stockItems = new ArrayList();
-
+    private SportsShopService sportsShopService;
+    
     /**
      * @const string array of JTable column names
      */
     private final String[] ascStockItemColumnNames = {
         "Code", "Title", "Description", "Price", "Quantity"
     };
-
+    
     /**
      * @const the index of quantity column in columns string array
      */
     private final int QUANTITY_TABLE_COLUMN_INDEX = 4;
-
+    
     /**
      * @var model class for stock item JTable
      */
     private AbstractTableModel ascStockItemModel;
-
+    
     /**
      * Creates new form SportsShopGUI
      */
     public SportsShopGUI() {
         initComponents();
+        this.sportsShopService = new SportsShopService(this);
     }
 
     /**
@@ -206,56 +198,14 @@ public class SportsShopGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Load stock data to main class
-     *
-     * @method loadData
-     */
-    public void loadData() {
-        try {
-            this.stockItems = FileService.make().loadData();
-        } catch (FileNotFoundException e) {
-            this.handleLoadDataException(e);
-        } catch (IOException e) {
-            this.handleLoadDataException(e);
-        }
-    }
-
-    /**
-     * Handle stock item data load exception
-     *
-     * @param e Exception
-     */
-    private void handleLoadDataException(Exception e) {
-        this.showError(e.getMessage(), "File loading Error");
-        System.err.println(e);
-        System.exit(0);
-    }
-
-    /**
      * Handle click event for buy button
      *
      * @param evt
      */
     private void buyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyButtonActionPerformed
-        int selectedRow = ascStockItem.getSelectedRow();
-
-        if (!this.validateSelectedItem(selectedRow)) {
-            this.showNoItemSelectedError();
-            return;
-        }
-
-        ASCStockItemInterface selectedStockItem = stockItems.get(selectedRow);
-
-        if (selectedStockItem.isOutOfStock()) {
-            this.showOutOfStockError();
-            return;
-        }
-
-        selectedStockItem.reduceQuantityOnStockByOne();
-
-        this.updateStockItemTable(selectedStockItem, selectedRow);
-
-        this.showBuyConfirmationMessage(selectedStockItem, 1);
+        this.sportsShopService.handleBuyButtonActionPerformed(
+                ascStockItem.getSelectedRow()
+        );
     }//GEN-LAST:event_buyButtonActionPerformed
 
     /**
@@ -264,20 +214,9 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param evt
      */
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        int selectedRow = ascStockItem.getSelectedRow();
-
-        if (!this.validateSelectedItem(selectedRow)) {
-            this.showNoItemSelectedError();
-            return;
-        }
-
-        ASCStockItemInterface selectedStockItem = stockItems.get(selectedRow);
-
-        selectedStockItem.increaseQuantityOnStockByOne();
-
-        this.updateStockItemTable(selectedStockItem, selectedRow);
-
-        this.showAddConfirmationMessage(selectedStockItem, 1);
+        this.sportsShopService.handleAddButtonActionPerformed(
+                ascStockItem.getSelectedRow()
+        );
     }//GEN-LAST:event_addButtonActionPerformed
 
     /**
@@ -286,18 +225,31 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param evt
      */
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        this.loadData();
+        this.sportsShopService.handleFormWindowOpened();
         this.loadStockItemsTable();
     }//GEN-LAST:event_formWindowOpened
 
+    /**
+     * Load stock items from array list to table model
+     */
+    private void loadStockItemsTable() {
+        ascStockItemModel = new ASCTableModel(ascStockItemColumnNames, 
+                this.sportsShopService.getStockItems()
+        );
+        ascStockItem.setModel(ascStockItemModel);
+        for (int col = 0; col < ascStockItem.getColumnCount(); col++) {
+            TableColumn column = ascStockItem.getTableHeader().getColumnModel().getColumn(col);
+            column.setHeaderValue(ascStockItemColumnNames[col]);
+        }
+    }
+    
     /**
      * Handle window closing event
      *
      * @param evt
      */
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        this.saveData();
-        System.exit(0);
+        this.sportsShopService.handleQuitButtonActionPerformed();
     }//GEN-LAST:event_formWindowClosing
 
     /**
@@ -306,8 +258,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param evt
      */
     private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
-        this.saveData();
-        System.exit(0);
+        this.sportsShopService.handleQuitButtonActionPerformed();
     }//GEN-LAST:event_quitButtonActionPerformed
 
     /**
@@ -316,13 +267,9 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param evt
      */
     private void ascStockItemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ascStockItemMousePressed
-        int selectedRow = ascStockItem.getSelectedRow();
-        if (this.validateSelectedItem(selectedRow)) {
-            ASCStockItemInterface selectedStockItem = stockItems.get(selectedRow);
-            this.photoLabel.setIcon(selectedStockItem.getImageIcon());
-            this.itemLabel.setText(selectedStockItem.getproductTitle());
-            this.showLowStockWarningMessage(selectedStockItem);
-        }
+        this.sportsShopService.handleASCStockItemMousePressed(
+                ascStockItem.getSelectedRow(), photoLabel, itemLabel
+        );
     }//GEN-LAST:event_ascStockItemMousePressed
 
     /**
@@ -331,27 +278,9 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param evt
      */
     private void buyXButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyXButtonActionPerformed
-        int selectedRow = ascStockItem.getSelectedRow();
-
-        if (!this.validateSelectedItem(selectedRow)) {
-            this.showNoItemSelectedError();
-            return;
-        }
-
-        ASCStockItemInterface selectedStockItem = stockItems.get(selectedRow);
-
-        if (selectedStockItem.isOutOfStock()) {
-            this.showOutOfStockError();
-            return;
-        }
-
-        int selectedValue = this.getBuyQuantityFromUser(selectedStockItem);
-
-        if (selectedValue > 0) {
-            selectedStockItem.reduceQuantityOnStockByX(selectedValue);
-            this.updateStockItemTable(selectedStockItem, selectedRow);
-            this.showBuyConfirmationMessage(selectedStockItem, selectedValue);
-        }
+        this.sportsShopService.handleBuyXButtonActionPerformed(
+                ascStockItem.getSelectedRow()
+        );
     }//GEN-LAST:event_buyXButtonActionPerformed
 
     /**
@@ -360,165 +289,10 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param evt
      */
     private void addYButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addYButtonActionPerformed
-        int selectedRow = ascStockItem.getSelectedRow();
-
-        if (!this.validateSelectedItem(selectedRow)) {
-            this.showNoItemSelectedError();
-            return;
-        }
-
-        ASCStockItemInterface selectedStockItem = stockItems.get(selectedRow);
-
-        int inputValue = this.getAddQuantityFromUser(selectedStockItem);
-
-        if (inputValue > 0) {
-            selectedStockItem.increaseQuantityOnStockByY(inputValue);
-            this.updateStockItemTable(selectedStockItem, selectedRow);
-            this.showAddConfirmationMessage(selectedStockItem, inputValue);
-        }
-    }//GEN-LAST:event_addYButtonActionPerformed
-
-    /**
-     * Get buy quantity input from user using a selection input dialog
-     *
-     * @param selectedStockItem
-     * @param action
-     * @return int
-     */
-    private int getAddQuantityFromUser(ASCStockItemInterface selectedStockItem) {
-        int inputValue = -1;
-
-        try {
-            String inputString = JOptionPane.showInputDialog(this,
-                    "Please select the quantity you wish to add of: \n'" + selectedStockItem.getproductTitle() + "'",
-                    "Quantity to purchase",
-                    JOptionPane.QUESTION_MESSAGE,
-                    this.getInputDialogImageIcon(selectedStockItem),
-                    null, null
-            ).toString();
-            inputValue = Integer.parseInt(inputString);
-        } catch (NumberFormatException e) {
-            this.showError("Please input a whole number.", "Invalid input");
-            return this.getAddQuantityFromUser(selectedStockItem);
-        } catch (NullPointerException e) {
-        }
-
-        return inputValue;
-    }
-
-    /**
-     * Get buy quantity input from user using a selection input dialog
-     *
-     * @param selectedStockItem
-     * @param action
-     * @return int
-     */
-    private int getBuyQuantityFromUser(ASCStockItemInterface selectedStockItem) {
-        int selectedValue = -1;
-
-        try {
-            selectedValue = (int) JOptionPane.showInputDialog(this,
-                    "Please select the quantity you wish to buy of: \n'" + selectedStockItem.getproductTitle() + "'",
-                    "Quantity to purchase",
-                    JOptionPane.QUESTION_MESSAGE,
-                    this.getInputDialogImageIcon(selectedStockItem),
-                    this.getSelectionOptionsInputDialog(selectedStockItem),
-                    1
-            );
-        } catch (NullPointerException e) {
-        }
-
-        return selectedValue;
-    }
-
-    /**
-     * Get the selection options for input dialog
-     *
-     * @param stockItem
-     * @return Object[]
-     */
-    private Object[] getSelectionOptionsInputDialog(ASCStockItemInterface stockItem) {
-        return IntStream.rangeClosed(
-                1, stockItem.getQuantityOnStock()
-        ).boxed().collect(Collectors.toList()).toArray();
-    }
-
-    /**
-     * Get an 100 X 100 size of the stock item image to be used for dialog
-     *
-     * @param stockItem
-     * @return ImageIcon
-     */
-    private ImageIcon getInputDialogImageIcon(ASCStockItemInterface stockItem) {
-        return new ImageIcon(
-                stockItem.getImageIcon()
-                        .getImage()
-                        .getScaledInstance(100, 100, Image.SCALE_SMOOTH)
+        this.sportsShopService.handleAddYButtonActionPerformed(
+                ascStockItem.getSelectedRow()
         );
-    }
-
-    /**
-     * Show low stock warning message
-     *
-     * @param stockItem
-     */
-    private void showLowStockWarningMessage(ASCStockItemInterface stockItem) {
-        String lowStockMessage = stockItem.isOutOfStock()
-                ? "'%s' is out of stock" : "'%s' has only %d unit(s) of stock";
-        if (stockItem.isLowOnStock()) {
-            this.showWarningMessgae(
-                    new Formatter().format(lowStockMessage,
-                            stockItem.getproductTitle(), stockItem.getQuantityOnStock()
-                    ).toString(), "Low Stock Warning"
-            );
-        }
-    }
-
-    /**
-     * Show warning message passed
-     *
-     * @param message
-     * @param title
-     */
-    private void showWarningMessgae(String message, String title) {
-        JOptionPane.showMessageDialog(this, message, title, JOptionPane.WARNING_MESSAGE);
-    }
-
-    /**
-     * Save data stock item to output file
-     */
-    private void saveData() {
-        try {
-            FileService.make(stockItems).saveData();
-        } catch (IOException e) {
-            this.showError("Error while saving output file", "Output File Error");
-            System.err.println(e);
-        }
-    }
-
-    /**
-     * Validate that an and item in the table is selected
-     *
-     * @param selectedRow
-     * @return int
-     */
-    private boolean validateSelectedItem(int selectedRow) {
-        return selectedRow >= 0;
-    }
-
-    /**
-     * Show and error message that no item is selected
-     */
-    private void showNoItemSelectedError() {
-        this.showError("Please select an item from the table", "No Item Selected");
-    }
-
-    /**
-     * Show and error message that item selected is out of stock
-     */
-    private void showOutOfStockError() {
-        this.showError("The item you have selected is out of stock", "Out Of Stock");
-    }
+    }//GEN-LAST:event_addYButtonActionPerformed
 
     /**
      * Update the stock item table with quantity changed on stockItem
@@ -526,65 +300,14 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param selectedStockItem
      * @param selectedRow
      */
-    private void updateStockItemTable(ASCStockItemInterface selectedStockItem, int selectedRow) {
+    public void updateStockItemTable(ASCStockItemInterface selectedStockItem, int selectedRow) {
         ascStockItemModel.setValueAt(
                 selectedStockItem.getQuantityOnStock(),
                 selectedRow,
                 QUANTITY_TABLE_COLUMN_INDEX
         );
     }
-
-    /**
-     * Show confirmation message for item bought
-     *
-     * @param stockItem
-     * @param unitBought
-     */
-    private void showBuyConfirmationMessage(ASCStockItemInterface stockItem, int unitBought) {
-        JOptionPane.showMessageDialog(this,
-                new Formatter().format("Item: %s%nPrice: %s%nUnit(s) bought: %d%nStock Remaining: %d",
-                        stockItem.getproductTitle(), stockItem.getUnitPriceFull(),
-                        unitBought, stockItem.getQuantityOnStock()
-                ).toString(), "Confirmation of Sale", JOptionPane.INFORMATION_MESSAGE
-        );
-    }
-
-    /**
-     * Show confirmation message for item added
-     *
-     * @param stockItem
-     * @param unitAdded
-     */
-    private void showAddConfirmationMessage(ASCStockItemInterface stockItem, int unitAdded) {
-        JOptionPane.showMessageDialog(this,
-                new Formatter().format("Item: %s%nUnit(s) added: %d%nNew stock quantity: %d",
-                        stockItem.getproductTitle(), unitAdded, stockItem.getQuantityOnStock()
-                ).toString(), "Confirmation of Added Stock", JOptionPane.INFORMATION_MESSAGE
-        );
-    }
-
-    /**
-     * Load stock items from array list to table model
-     */
-    private void loadStockItemsTable() {
-        ascStockItemModel = new ASCTableModel(ascStockItemColumnNames, this.stockItems);
-        ascStockItem.setModel(ascStockItemModel);
-        for (int col = 0; col < ascStockItem.getColumnCount(); col++) {
-            TableColumn column = ascStockItem.getTableHeader().getColumnModel().getColumn(col);
-            column.setHeaderValue(ascStockItemColumnNames[col]);
-        }
-    }
-
-    /**
-     * Show error message passed
-     *
-     * @param error
-     * @param title
-     */
-    private void showError(String error, String title) {
-        JOptionPane.showMessageDialog(this, error, title, JOptionPane.ERROR_MESSAGE);
-    }
-
+    
     /**
      * Application entry point
      *
