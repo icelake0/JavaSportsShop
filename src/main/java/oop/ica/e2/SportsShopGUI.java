@@ -53,12 +53,12 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
         photoPanel = new javax.swing.JPanel();
         photoLabel = new javax.swing.JLabel();
+        itemLabel = new javax.swing.JLabel();
         buyButton = new javax.swing.JButton();
         addButton = new javax.swing.JButton();
         buyXButton = new javax.swing.JButton();
         addYButton = new javax.swing.JButton();
         quitButton = new javax.swing.JButton();
-        itemLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         ascStockItem = new javax.swing.JTable();
 
@@ -72,23 +72,32 @@ public class SportsShopGUI extends javax.swing.JFrame {
             }
         });
 
-        photoLabel.setText("photoLabel");
+        photoLabel.setBackground(new java.awt.Color(255, 255, 255));
+        photoLabel.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+
+        itemLabel.setText("Item Photo");
 
         javax.swing.GroupLayout photoPanelLayout = new javax.swing.GroupLayout(photoPanel);
         photoPanel.setLayout(photoPanelLayout);
         photoPanelLayout.setHorizontalGroup(
             photoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(photoPanelLayout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addComponent(photoLabel)
-                .addContainerGap(124, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(photoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(photoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(photoPanelLayout.createSequentialGroup()
+                        .addComponent(itemLabel)
+                        .addGap(0, 246, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         photoPanelLayout.setVerticalGroup(
             photoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(photoPanelLayout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(photoLabel)
-                .addContainerGap(218, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, photoPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(itemLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(photoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         buyButton.setText("Buy");
@@ -117,8 +126,6 @@ public class SportsShopGUI extends javax.swing.JFrame {
             }
         });
 
-        itemLabel.setText("Item Photo");
-
         ascStockItem.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -139,7 +146,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(buyButton)
@@ -150,29 +157,22 @@ public class SportsShopGUI extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(addYButton)
                         .addGap(18, 18, 18)
-                        .addComponent(quitButton)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(quitButton))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 517, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 498, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(photoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(itemLabel)
-                                .addGap(0, 0, Short.MAX_VALUE))))))
+                        .addComponent(photoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(itemLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(photoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(0, 11, Short.MAX_VALUE)
+                        .addComponent(photoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buyButton)
                     .addComponent(addButton)
@@ -299,6 +299,8 @@ public class SportsShopGUI extends javax.swing.JFrame {
         int selectedRow = ascStockItem.getSelectedRow();
         if (this.validateSelectedItem(selectedRow)) {
             ASCStockItem selectedStockItem = stockItems.get(selectedRow);
+            this.photoLabel.setIcon(selectedStockItem.getImageIcon());
+            this.itemLabel.setText(selectedStockItem.getproductTitle());
             this.showLowStockWarningMessage(selectedStockItem);
         }
     }//GEN-LAST:event_ascStockItemMousePressed

@@ -23,5 +23,8 @@
 hs_err_pid*
 /target/
 
-#application stock item output file 
+# application stock item output file 
 asc_output.txt
+
+# ignore macbook DS_Store file
+*.DS_Store

@@ -1,6 +1,7 @@
 package oop.ica.e2;
 
 import java.util.Formatter;
+import javax.swing.ImageIcon;
 
 /**
  * @author Gbemileke Ajiboye - C2479785
@@ -38,6 +39,11 @@ public class ASCStockItem {
     private int quantityOnStock;
 
     /**
+     * @var ImageIcon: Image icon of stock item
+     */
+    private ImageIcon imageIcon;
+
+    /**
      * Class constructor
      *
      * @param productCode: String
@@ -62,6 +68,7 @@ public class ASCStockItem {
         this.unitPricePounds = unitPricePounds;
         this.unitPricePence = unitPricePence;
         this.quantityOnStock = quantityOnStock;
+        this.imageIcon = new ImageIcon("./images/asc_pics/" + this.productCode + ".jpg");
     }
 
     /**
@@ -160,6 +167,16 @@ public class ASCStockItem {
      */
     public int getQuantityOnStock() {
         return quantityOnStock;
+    }
+
+    /**
+     * Get the image icon of stock item
+     *
+     * @method getImageIcon
+     * @return ImageIcon
+     */
+    public ImageIcon getImageIcon() {
+        return imageIcon;
     }
 
     /**
