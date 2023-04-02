@@ -25,7 +25,7 @@ public class ASCTableModel extends AbstractTableModel {
      * @param columnNames
      * @param dataList
      */
-    public ASCTableModel(final String[] columnNames, final ArrayList<ASCStockItem> dataList) {
+    public ASCTableModel(final String[] columnNames, final ArrayList<ASCStockItemInterface> dataList) {
         this.columnNames = Arrays.copyOf(columnNames, columnNames.length);
         this.data = new Object[dataList.size()][columnNames.length];
         this.populateDataWithStockItems(dataList);
@@ -36,7 +36,7 @@ public class ASCTableModel extends AbstractTableModel {
      *
      * @param ArrayList<StockItem> dataList
      */
-    private void populateDataWithStockItems(final ArrayList<ASCStockItem> dataList) {
+    private void populateDataWithStockItems(final ArrayList<ASCStockItemInterface> dataList) {
         for (int index = 0; index < dataList.size(); index++) {
             data[index] = this.getStockItemDataObject(dataList.get(index));
         }
@@ -48,7 +48,7 @@ public class ASCTableModel extends AbstractTableModel {
      * @param stockItem
      * @return Object[]
      */
-    private Object[] getStockItemDataObject(ASCStockItem stockItem) {
+    private Object[] getStockItemDataObject(ASCStockItemInterface stockItem) {
         return Arrays.copyOf(new Object[]{
             stockItem.getProductCode(), stockItem.getproductTitle(),
             stockItem.getProductDescription(), stockItem.getUnitPriceFull(),
