@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.IllegalFormatConversionException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -127,6 +128,11 @@ public class SportsShopGUI extends javax.swing.JFrame {
         });
 
         addYButton.setText("Add Y");
+        addYButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addYButtonActionPerformed(evt);
+            }
+        });
 
         quitButton.setBackground(new java.awt.Color(255, 51, 0));
         quitButton.setText("Quit");
@@ -335,7 +341,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
             return;
         }
 
-        int selectedValue = this.getInputFromUser(selectedStockItem, "buy");
+        int selectedValue = this.getBuyQuantityFromUser(selectedStockItem);
 
         if (selectedValue > 0) {
             selectedStockItem.reduceQuantityOnStockByX(selectedValue);
@@ -345,19 +351,71 @@ public class SportsShopGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_buyXButtonActionPerformed
 
     /**
-     * Get input from user using a selection input dialog
+     * Handle click event for addY button
+     *
+     * @param evt
+     */
+    private void addYButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addYButtonActionPerformed
+        int selectedRow = ascStockItem.getSelectedRow();
+
+        if (!this.validateSelectedItem(selectedRow)) {
+            this.showNoItemSelectedError();
+            return;
+        }
+
+        ASCStockItem selectedStockItem = stockItems.get(selectedRow);
+
+        int inputValue = this.getAddQuantityFromUser(selectedStockItem);
+
+        if (inputValue > 0) {
+            selectedStockItem.increaseQuantityOnStockByY(inputValue);
+            this.updateStockItemTable(selectedStockItem, selectedRow);
+            this.showAddConfirmationMessage(selectedStockItem, inputValue);
+        }
+    }//GEN-LAST:event_addYButtonActionPerformed
+
+    /**
+     * Get buy quantity input from user using a selection input dialog
      *
      * @param selectedStockItem
      * @param action
      * @return int
      */
-    private int getInputFromUser(ASCStockItem selectedStockItem, String action) {
+    private int getAddQuantityFromUser(ASCStockItem selectedStockItem) {
+        int inputValue = -1;
+
+        try {
+            String inputString = JOptionPane.showInputDialog(this,
+                    "Please select the quantity you wish to add of: \n'" + selectedStockItem.getproductTitle() + "'",
+                    "Quantity to purchase",
+                    JOptionPane.QUESTION_MESSAGE,
+                    this.getInputDialogImageIcon(selectedStockItem),
+                    null, null
+            ).toString();
+            inputValue = Integer.parseInt(inputString);
+        } catch (NumberFormatException e) {
+            this.showError("Please input a whole number.", "Invalid input");
+            return this.getAddQuantityFromUser(selectedStockItem);
+        } catch (NullPointerException e) {
+        }
+
+        return inputValue;
+    }
+
+    /**
+     * Get buy quantity input from user using a selection input dialog
+     *
+     * @param selectedStockItem
+     * @param action
+     * @return int
+     */
+    private int getBuyQuantityFromUser(ASCStockItem selectedStockItem) {
         int selectedValue = -1;
-        String dialogTitle = action == "buy" ? "Quantity to purchase" : "Quantity to add";
+
         try {
             selectedValue = (int) JOptionPane.showInputDialog(this,
-                    "Please select the quantity you wish to " + action + " of: \n'" + selectedStockItem.getproductTitle() + "'",
-                    dialogTitle,
+                    "Please select the quantity you wish to buy of: \n'" + selectedStockItem.getproductTitle() + "'",
+                    "Quantity to purchase",
                     JOptionPane.QUESTION_MESSAGE,
                     this.getInputDialogImageIcon(selectedStockItem),
                     this.getSelectionOptionsInputDialog(selectedStockItem),
@@ -479,7 +537,12 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param unitBought
      */
     private void showBuyConfirmationMessage(ASCStockItem stockItem, int unitBought) {
-        this.showAConfirmationMessageForAction("bought", stockItem, unitBought, "Confirmation of Sale");
+        JOptionPane.showMessageDialog(this,
+                new Formatter().format("Item: %s%nPrice: %s%nUnit(s) bought: %d%nStock Remaining: %d",
+                        stockItem.getproductTitle(), stockItem.getUnitPriceFull(),
+                        unitBought, stockItem.getQuantityOnStock()
+                ).toString(), "Confirmation of Sale", JOptionPane.INFORMATION_MESSAGE
+        );
     }
 
     /**
@@ -489,23 +552,10 @@ public class SportsShopGUI extends javax.swing.JFrame {
      * @param unitAdded
      */
     private void showAddConfirmationMessage(ASCStockItem stockItem, int unitAdded) {
-        this.showAConfirmationMessageForAction("added", stockItem, unitAdded, "Confirmation of Item Added");
-    }
-
-    /**
-     * Show confirmation message for item added or bought
-     *
-     * @param action
-     * @param stockItem
-     * @param unit
-     * @param title
-     */
-    private void showAConfirmationMessageForAction(String action, ASCStockItem stockItem, int unit, String title) {
         JOptionPane.showMessageDialog(this,
-                new Formatter().format("Item: %s%nPrice: %s%nUnit(s) %s: %d%nStock Remaining: %d",
-                        stockItem.getproductTitle(), stockItem.getUnitPriceFull(),
-                        action, unit, stockItem.getQuantityOnStock()
-                ).toString(), title, JOptionPane.INFORMATION_MESSAGE
+                new Formatter().format("Item: %s%nUnit(s) added: %d%nNew stock quantity: %d",
+                        stockItem.getproductTitle(), unitAdded, stockItem.getQuantityOnStock()
+                ).toString(), "Confirmation of Added Stock", JOptionPane.INFORMATION_MESSAGE
         );
     }
 

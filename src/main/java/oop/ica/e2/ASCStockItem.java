@@ -212,7 +212,7 @@ public class ASCStockItem {
      * @method increaseQuantityOnStockByY
      */
     public void increaseQuantityOnStockByY(int Y) {
-        this.quantityOnStock++;
+        this.quantityOnStock += Y;
     }
 
     /**
