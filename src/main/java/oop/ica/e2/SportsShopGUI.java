@@ -59,6 +59,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
 
         photoPanel = new javax.swing.JPanel();
         photoLabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         itemLabel = new javax.swing.JLabel();
         buyButton = new javax.swing.JButton();
         addButton = new javax.swing.JButton();
@@ -81,7 +82,9 @@ public class SportsShopGUI extends javax.swing.JFrame {
         photoLabel.setBackground(new java.awt.Color(255, 255, 255));
         photoLabel.setBorder(javax.swing.BorderFactory.createCompoundBorder());
 
-        itemLabel.setText("Item Photo");
+        jLabel1.setText("Item Photo");
+
+        itemLabel.setText("Item Title");
 
         javax.swing.GroupLayout photoPanelLayout = new javax.swing.GroupLayout(photoPanel);
         photoPanel.setLayout(photoPanelLayout);
@@ -92,18 +95,20 @@ public class SportsShopGUI extends javax.swing.JFrame {
                 .addGroup(photoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(photoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(photoPanelLayout.createSequentialGroup()
-                        .addComponent(itemLabel)
-                        .addGap(0, 246, Short.MAX_VALUE)))
+                        .addGroup(photoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(itemLabel))
+                        .addGap(0, 266, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         photoPanelLayout.setVerticalGroup(
             photoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, photoPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(itemLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(photoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(itemLabel))
         );
 
         buyButton.setText("Buy");
@@ -186,7 +191,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 11, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(photoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -625,6 +630,7 @@ public class SportsShopGUI extends javax.swing.JFrame {
     private javax.swing.JButton buyButton;
     private javax.swing.JButton buyXButton;
     private javax.swing.JLabel itemLabel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel photoLabel;
     private javax.swing.JPanel photoPanel;
