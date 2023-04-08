@@ -6,29 +6,29 @@ import oop.ica.ts.TSProduct;
 /**
  * @author Gbemileke Ajiboye - C2479785
  */
-public class TSProductASCAdapter implements ASCStockItemInterface {
-    
-    /**
-     * @var tsProduct : The instance of TSProduct this class serves as rapper for
-     */
-    private TSProduct tsProduct;
-    
+public class TSProductASCAdapter extends TSProduct implements ASCStockItemInterface {
+
     /**
      * @var ImageIcon: Image icon of stock item
      */
     private ImageIcon imageIcon;
-    
+
     /**
      * Class constructor
-     * 
-     * @param tsProduct 
+     *
+     * @param num
+     * @param make
+     * @param mdl
+     * @param clr
+     * @param notes
+     * @param price
+     * @param stk
      */
-    public TSProductASCAdapter (TSProduct tsProduct)
-    {
-        this.tsProduct = tsProduct;
+    public TSProductASCAdapter(String num, String make, String mdl, String clr, String notes, double price, int stk) {
+        super(num, make, mdl, clr, notes, price, stk);
         this.imageIcon = new ImageIcon("./images/ts_pics/" + this.getProductCode() + ".jpg");
     }
-    
+
     /**
      * Get the stock item product code
      *
@@ -36,8 +36,8 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * @return String
      */
     @Override
-    public String getProductCode(){
-        return this.tsProduct.getSkuNumber();
+    public String getProductCode() {
+        return this.getSkuNumber();
     }
 
     /**
@@ -47,10 +47,10 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * @return String
      */
     @Override
-    public String getproductTitle(){
-        return this.tsProduct.getColour() + " "
-                + this.tsProduct.getModel() + " "
-                + this.tsProduct.getMake();
+    public String getproductTitle() {
+        return this.getColour() + " "
+                + this.getModel() + " "
+                + this.getMake();
     }
 
     /**
@@ -60,8 +60,8 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * @return String
      */
     @Override
-    public String getProductDescription(){
-        return this.tsProduct.getNotes();
+    public String getProductDescription() {
+        return this.getNotes();
     }
 
     /**
@@ -71,10 +71,10 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * @return Integer
      */
     @Override
-    public int getUnitPricePounds(){
+    public int getUnitPricePounds() {
         return Integer.parseInt(
-            Double.toString(this.tsProduct.getPrice())
-                .split("\\.")[0]
+                Double.toString(this.getPrice())
+                        .split("\\.")[0]
         );
     }
 
@@ -85,10 +85,10 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * @return Integer
      */
     @Override
-    public int getUnitPricePence(){
+    public int getUnitPricePence() {
         return Integer.parseInt(
-            Double.toString(this.tsProduct.getPrice())
-                .split("\\.")[1]
+                Double.toString(this.getPrice())
+                        .split("\\.")[1]
         );
     }
 
@@ -99,8 +99,8 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * @return String
      */
     @Override
-    public String getUnitPriceFull(){
-        return "£"+this.tsProduct.getPrice();
+    public String getUnitPriceFull() {
+        return "£" + this.getPrice();
     }
 
     /**
@@ -110,8 +110,8 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * @return Integer
      */
     @Override
-    public int getQuantityOnStock(){
-        return this.tsProduct.getStock();
+    public int getQuantityOnStock() {
+        return this.getStock();
     }
 
     /**
@@ -121,7 +121,7 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * @return ImageIcon
      */
     @Override
-    public ImageIcon getImageIcon(){
+    public ImageIcon getImageIcon() {
         return this.imageIcon;
     }
 
@@ -131,8 +131,8 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * @method reduceQuantityOnStockByOne
      */
     @Override
-    public void reduceQuantityOnStockByOne(){
-        this.tsProduct.decreaseStock();
+    public void reduceQuantityOnStockByOne() {
+        this.decreaseStock();
     }
 
     /**
@@ -142,8 +142,8 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * @method reduceQuantityOnStockByX
      */
     @Override
-    public void reduceQuantityOnStockByX(int X){
-        this.tsProduct.setStock(this.getQuantityOnStock() - X);
+    public void reduceQuantityOnStockByX(int X) {
+        this.setStock(this.getQuantityOnStock() - X);
     }
 
     /**
@@ -152,8 +152,8 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * @method increaseQuantityOnStockByOne
      */
     @Override
-    public void increaseQuantityOnStockByOne(){
-        this.tsProduct.decreaseStock();
+    public void increaseQuantityOnStockByOne() {
+        this.decreaseStock();
     }
 
     /**
@@ -163,8 +163,8 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * @method increaseQuantityOnStockByY
      */
     @Override
-    public void increaseQuantityOnStockByY(int Y){
-        this.tsProduct.setStock(this.getQuantityOnStock() + Y);
+    public void increaseQuantityOnStockByY(int Y) {
+        this.setStock(this.getQuantityOnStock() + Y);
     }
 
     /**
@@ -174,7 +174,7 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * @return Boolean
      */
     @Override
-    public boolean isOnStock(){
+    public boolean isOnStock() {
         return this.getQuantityOnStock() > 0;
     }
 
@@ -185,7 +185,7 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * @return Boolean
      */
     @Override
-    public boolean isOutOfStock(){
+    public boolean isOutOfStock() {
         return !this.isOnStock();
     }
 
@@ -196,7 +196,7 @@ public class TSProductASCAdapter implements ASCStockItemInterface {
      * @return Boolean
      */
     @Override
-    public boolean isLowOnStock(){
+    public boolean isLowOnStock() {
         return this.getQuantityOnStock() < 5;
     }
 }

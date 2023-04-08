@@ -148,7 +148,7 @@ public class SportsShopService {
     }
 
     /**
-     * Handle click event for buyY button
+     * Handle click event for addY button
      * 
      * @param selectedRow
      */

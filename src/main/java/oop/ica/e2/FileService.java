@@ -12,7 +12,6 @@ import static java.nio.file.StandardOpenOption.WRITE;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Scanner;
-import oop.ica.ts.TSProduct;
 
 /**
  * @author Gbemileke Ajiboye - C2479785
@@ -213,10 +212,9 @@ public class FileService {
         double price = Double.parseDouble(lineArray[5]);
         int stk = Integer.parseInt(lineArray[6]);
 
-        TSProduct tsProduct = new TSProduct(
+        return new TSProductASCAdapter(
                 num, make, mdl, clr, notes, price, stk
         );
-        return new TSProductASCAdapter ( tsProduct);
     }
 
     /**
