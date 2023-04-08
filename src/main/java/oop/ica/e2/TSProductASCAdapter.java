@@ -26,7 +26,7 @@ public class TSProductASCAdapter extends TSProduct implements ASCStockItemInterf
      */
     public TSProductASCAdapter(String num, String make, String mdl, String clr, String notes, double price, int stk) {
         super(num, make, mdl, clr, notes, price, stk);
-        this.imageIcon = new ImageIcon("./images/ts_pics/" + this.getProductCode() + ".jpg");
+        this.imageIcon = new ImageIcon("./photos/ts_pics/" + this.getProductCode() + ".jpg");
     }
 
     /**
