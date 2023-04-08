@@ -68,7 +68,7 @@ public class ASCStockItem implements ASCStockItemInterface {
         this.unitPricePounds = unitPricePounds;
         this.unitPricePence = unitPricePence;
         this.quantityOnStock = quantityOnStock;
-        this.imageIcon = new ImageIcon("./images/asc_pics/" + this.productCode + ".jpg");
+        this.imageIcon = new ImageIcon("./photos/asc_pics/" + this.productCode + ".jpg");
     }
 
     /**
