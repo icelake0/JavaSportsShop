@@ -153,7 +153,7 @@ public class TSProductASCAdapter extends TSProduct implements ASCStockItemInterf
      */
     @Override
     public void increaseQuantityOnStockByOne() {
-        this.decreaseStock();
+        this.increaseStock();
     }
 
     /**
