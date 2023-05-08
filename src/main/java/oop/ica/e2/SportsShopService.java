@@ -207,13 +207,17 @@ public class SportsShopService {
 
         try {
             String inputString = JOptionPane.showInputDialog(this.sportsShopGUI,
-                    "Please select the quantity you wish to add of: \n'" + selectedStockItem.getproductTitle() + "'",
+                    "Please input the quantity (between 5 and 10) you wish to add of: \n'" + selectedStockItem.getproductTitle() + "'",
                     "Quantity to purchase",
                     JOptionPane.QUESTION_MESSAGE,
                     this.getInputDialogImageIcon(selectedStockItem),
                     null, null
             ).toString();
             inputValue = Integer.parseInt(inputString);
+            if(inputValue < 5 || inputValue > 10){
+                this.showError("Please input a number between 5 and 10.", "Invalid input");
+                return this.getAddQuantityFromUser(selectedStockItem);
+            }
         } catch (NumberFormatException e) {
             this.showError("Please input a whole number.", "Invalid input");
             return this.getAddQuantityFromUser(selectedStockItem);
