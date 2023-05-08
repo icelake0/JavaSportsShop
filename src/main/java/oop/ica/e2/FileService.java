@@ -31,7 +31,7 @@ public class FileService {
     /**
      * @constant String: project relative file patch for TS data
      */
-    private static final String RELATIVE_TS_FILE_PATH = "src/main/java/oop/ica/ts/";
+    private static final String RELATIVE_TS_FILE_PATH = "src/main/java/oop/ica/e2/";
 
     /**
      * @constant String: Input data file name
